@@ -5,7 +5,7 @@ var hours = date.getHours();
 var mins = date.getMinutes();
 var sec = date.getSeconds();
 var day = date.getDate();
-var month = date.getMonth();
+var month = date.getMonth() + 1;
 var year = date.getFullYear();
 
 app.get('/messenger', function(req,res){
