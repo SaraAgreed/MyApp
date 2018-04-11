@@ -1,33 +1,22 @@
-var express = require('express');
-var app = express();
-var date = new Date();
-var hours = date.getHours();
-var mins = date.getMinutes();
-var sec = date.getSeconds();
-var day = date.getDate();
-var month = date.getMonth() + 1;
-var year = date.getFullYear();
+import React, { Component } from 'react';
 
-app.get('/messenger', function(req,res){
-  var messenger =  {
-    "user1" : 
-    [
-      {
-      "name" : "Sara",
-      "msg" : "Hello Sir",
-      "time" : [hours, ":", mins, ":", sec],
-      "date" : [day,month, ",", year]     
-    }
-  ],
-    "user2": 
-    [
-      {
-      "name" : "Hamza Sir",
-      "msg" : "Hello Sara",
-      "date and time" : Date(),
-    }
-  ]
+import {StackNavigator} from 'react-navigation';
+
+import Home from './Pages/Home.js'
+import Group1 from './Pages/Group1.js'
+import Authenticate from './Pages/Authenticate.js'
+
+const Navigation = StackNavigator({
+  Home: {
+    screen: Home
+    },
+    Group1: {
+    screen: Group1
+  },
+  Authenticate: {
+    screen: Authenticate
   }
-  return res.json(messenger)
+   
 });
-app.listen(3000);
+
+export default Navigation;
