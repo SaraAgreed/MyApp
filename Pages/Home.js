@@ -7,7 +7,8 @@ import {
     TouchableOpacity,
     FlatList,
     ListView,
-    Alert
+    Alert,
+    Image,
 } from 'react-native';
 
 export default class Home extends Component{
@@ -59,17 +60,34 @@ export default class Home extends Component{
     render() {
         return(
             <View>
+                  <View style={styles.componentContainer}>
+            
+                    <TextInput
+                        placeholder = "Search..."
+                        placeholderTextColor = '#95A5A6'
+                        underlineColorAndroid='transparent'                       
+                        style={styles.input}
+                    />
+
+                    <TouchableOpacity style = {styles.buttonContainer}>
+                        <Image
+                            source={require('./img/isearch.png')}
+                            style={styles.sendbtn}
+                        />
+                    </TouchableOpacity>
+                    </View>
             <View>  
                    <FlatList
              data={this.state.dataSource}
              renderItem={({item}) =>
              <View style={styles.container}>
-             <Text 
-             style={styles.grpStyle}
-            onPress={() => this.CheckAuth(item.chatroom_id,item.type,item.secret_question)}
-            // onPress={() => this.props.navigation.navigate("Authenticate")}
-             >{item.chatroom_name}
-             </Text>
+                <View style={styles.chatView}> 
+                    <Text
+                    style={styles.grpStyle}
+                    onPress={() => this.CheckAuth(item.chatroom_id,item.type,item.secret_question)}
+                    >{item.chatroom_name}
+                    </Text>
+                </View>           
              </View> 
              }
              
@@ -77,6 +95,7 @@ export default class Home extends Component{
            />
    
            </View>
+           
            </View>
         );
     } 
@@ -85,8 +104,42 @@ export default class Home extends Component{
 const styles= StyleSheet.create({
 container: {
 alignItems: 'center',
-flex: 1,
+flex:1,
 justifyContent: 'center',
+marginTop:5,
+backgroundColor:'#fff',
 padding:10,
 },
+grpStyle: {
+    fontFamily:'serif',
+},
+chatView: {
+    flex: 1,
+},
+componentContainer: {
+    flexDirection:'row',
+    alignItems:'flex-end',
+    padding:5,
+  
+},
+input: {
+    padding:10,
+    height: 40,
+    flex:1,
+    borderRadius:15,
+    backgroundColor:'#fff'
+    
+},
+buttonContainer:
+{
+    padding:5,  
+    backgroundColor:'#fff',
+    borderRadius:18,
+},
+sendbtn: {
+    width:30,
+    height:30,
+},
+
+
 }); 

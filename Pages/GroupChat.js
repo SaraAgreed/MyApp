@@ -48,15 +48,15 @@ export default class Group1 extends Component{
           getStyleClass = function(sentBy)
           {
               if(sentBy == 'asd') {
-                    return {  
+                    return {  flex:1,
                         padding:13,
                         alignItems:'flex-end',
                         backgroundColor:'#89C4F4',
-                        borderRadius:12,
+                        borderRadius:10,
                     }
               }
               else {
-                return {  
+                return {  flex:1,
                     padding:13,
                     alignItems:'flex-start',
                     backgroundColor:'#fff',
@@ -67,14 +67,14 @@ export default class Group1 extends Component{
           getStyleConClass = function(sentBy)
           {
               if(sentBy == 'asd') {
-                    return { 
+                    return {  flex:1,
                         padding:10,
                         alignItems:'flex-end',
                         width:'100%',
                     }
               }
               else {
-                return {  
+                return {  flex:1,
                     padding:10,
                     alignItems:'flex-start',
                     width:'100%',
@@ -84,7 +84,7 @@ export default class Group1 extends Component{
     render() {
         
         return(
-            
+    
             <View>
                <View style={{marginBottom:52}}>
                     <FlatList
@@ -98,10 +98,10 @@ export default class Group1 extends Component{
             </View> 
           </View>
           
-          } 
+          }
+          
           keyExtractor={(item, index) => index}
         />
-         
         </View>
           <View
           style={styles.componentContainer}

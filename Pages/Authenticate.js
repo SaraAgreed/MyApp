@@ -5,13 +5,16 @@ import {
     TextInput,
     StyleSheet,
     TouchableOpacity,
+    KeyboardAvoidingView
 } from 'react-native';
 
 export default class Authenticate extends Component{
     
     render() {
         return(
-            <View style={styles.container}>
+            <KeyboardAvoidingView
+            behavior='padding'
+             style={styles.container}>
                
                 <View style={styles.components}>
                     <Text style={styles.inputStyle}>
@@ -34,7 +37,7 @@ export default class Authenticate extends Component{
                          </View>
                     </TouchableOpacity>
                  </View>
-            </View>
+            </KeyboardAvoidingView>
         );
     } 
 }
