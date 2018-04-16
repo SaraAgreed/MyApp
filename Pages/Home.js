@@ -19,13 +19,39 @@ export default class Home extends Component{
     constructor() {
         super();
         this.state={
-
             dataSource:new ListView.DataSource({rowHasChanged:(r1,r2)=>r1 !== r2}),
             link: 'http://testingoncloud.com/chat/index.php/chatroom/chatroomList',
             secretQuestion:"",
-            chatroomId:""
+            chatroomId:"",
+            searchkey:"",
         } 
     }   
+    search() {
+            fetch('http://testingoncloud.com/chat/index.php/chatroom/chatroomList?search='+this.state.search, {              
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    search: this.state.search
+                }),
+            })
+            .then((response) => response.json())
+          .then((responseJson) => {
+    
+            this.setState({
+              isLoading: false,
+              dataSource: responseJson.response.data
+            }, function(){
+    
+            });
+    
+          })
+          .catch((error) =>{
+            console.error(error);
+          });
+    }
     componentDidMount(){
         return fetch(this.state.link)
           .then((response) => response.json())
@@ -48,11 +74,11 @@ export default class Home extends Component{
         if(type=="private") {
             this.state.secretQuestion=question;
             this.state.secretId=id;
-
-            this.props.navigation.navigate("Authenticate");
+            this.state.secretQuestion=question;
+            this.props.navigation.navigate("Authenticate",{question:question,chatroom_id:id});
         }
         else {
-            this.props.navigation.navigate("Group1")
+            this.props.navigation.navigate("GroupChatForm",{chatroom_id:id,sent_by:'asd'})
         }
       }
 
@@ -64,15 +90,19 @@ export default class Home extends Component{
             
                     <TextInput
                         placeholder = "Search..."
+                        onChangeText={search => this.setState({search})}
                         placeholderTextColor = '#95A5A6'
                         underlineColorAndroid='transparent'                       
                         style={styles.input}
                     />
 
-                    <TouchableOpacity style = {styles.buttonContainer}>
+                    <TouchableOpacity 
+                    onPress={() => this.search()}
+                    style = {styles.buttonContainer}>
                         <Image
                             source={require('./img/isearch.png')}
                             style={styles.sendbtn}
+                            
                         />
                     </TouchableOpacity>
                     </View>

@@ -9,8 +9,49 @@ import {
 } from 'react-native';
 
 export default class Authenticate extends Component{
-    
+    constructor(props){
+
+        super()
+        this.state={
+            secretQuestion:'',
+            secretAns:'',
+            chatroomId:''
+        }
+    }
+    login() {  
+        fetch('http://testingoncloud.com/chat/index.php/chatroom/validateChatroom?chatroom_id='+this.state.chatroomId+'&secret_question='+this.state.secretQuestion+'&secret_ans='+this.state.secretAns,{
+        /*var formData = new FormData(); 
+        formData.append('secret_question', this.state.secretQuestion);
+        formData.append('secret_ans', this.state.secretAns);   
+        formData.append('chatroom_id', this.state.chatroomId);
+        alert(formData);*/
+       // fetch('http://testingoncloud.com/chat/index.php/chatroom/validateChatroom', {              
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                secret_question: this.state.secretQuestion,
+                secret_ans: this.state.secretAns,
+                chatroom_id: this.state.chatroomId
+            }),
+        })
+        .then((response) => response.json())
+        .then((responseJson)=>{
+            if(responseJson.response.status == 'Success') {
+                alert('Successfully Login.');
+                this.props.navigation.navigate("GroupChatForm",{chatroom_id:this.state.chatroomId,sent_by: 'asd'});
+            }
+            else {
+                alert('Wrong details.');
+            }
+        });
+    }
     render() {
+        const {params} = this.props.navigation.state;
+        this.state.secretQuestion = params.question;
+        this.state.chatroomId = params.chatroom_id;
         return(
             <KeyboardAvoidingView
             behavior='padding'
@@ -18,12 +59,13 @@ export default class Authenticate extends Component{
                
                 <View style={styles.components}>
                     <Text style={styles.inputStyle}>
-                    Security Question
+                    {params.question}
                     </Text>
                 </View>
 
                 <View style={styles.components}>
                     <TextInput 
+                    onChangeText={secretAns => this.setState({secretAns})}
                     style={styles.inputStyle}
                     placeholder="Answer"
                     placeholderTextColor='#264348'/>
@@ -31,7 +73,7 @@ export default class Authenticate extends Component{
 
                  <View style={styles.components}>
                     <TouchableOpacity 
-                    onPress={() => this.props.navigation.navigate("Group1")}>
+                    onPress={() => this.login()}>
                          <View style={styles.button}>
                             <Text style={styles.buttonText}>Verify</Text>
                          </View>

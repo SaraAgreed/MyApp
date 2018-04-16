@@ -9,25 +9,29 @@ import {
     TouchableOpacity,
     Image,
     FlatList,
-    ImageBackground,
-    KeyboardAvoidingView
 } from 'react-native';
 
-
-export default class Group1 extends Component{
+export default class ChatPage extends Component{
 
         static navigationOptions={
-            title:'Group1'
+            title:'GroupChat'
         }
 
         constructor() {
             super();
-            this.state={
-                dataSource:new ListView.DataSource({rowHasChanged:(r1,r2)=>r1 !== r2}),
-                link: 'http://testingoncloud.com/chat/index.php/chatroom/getConversation?chatroom_id=1&secret_question=what%20is%20your%20pet%20name&secret_ans=dobby',
-            } 
+            
+                this.state={
+                    dataSource:new ListView.DataSource({rowHasChanged:(r1,r2)=>r1 !== r2}),
+                    link: 'http://testingoncloud.com/chat/index.php/chatroom/getConversation?chatroom_id=1&secret_question=what%20is%20your%20pet%20name&secret_ans=dobby',
+                    
+                } 
+                alert(this.state.chatroom)
+            
+            
         }   
         componentDidMount(){
+            setInterval(() => {
+                
             return fetch(this.state.link)
               .then((response) => response.json())
               .then((responseJson) => {
@@ -43,20 +47,21 @@ export default class Group1 extends Component{
               .catch((error) =>{
                 console.error(error);
               });
+            }, 1000);
           } 
 
           getStyleClass = function(sentBy)
           {
               if(sentBy == 'asd') {
-                    return {  flex:1,
+                    return {  
                         padding:13,
                         alignItems:'flex-end',
                         backgroundColor:'#89C4F4',
-                        borderRadius:10,
+                        borderRadius:12,
                     }
               }
               else {
-                return {  flex:1,
+                return {  
                     padding:13,
                     alignItems:'flex-start',
                     backgroundColor:'#fff',
@@ -67,14 +72,14 @@ export default class Group1 extends Component{
           getStyleConClass = function(sentBy)
           {
               if(sentBy == 'asd') {
-                    return {  flex:1,
+                    return { 
                         padding:10,
                         alignItems:'flex-end',
                         width:'100%',
                     }
               }
               else {
-                return {  flex:1,
+                return {  
                     padding:10,
                     alignItems:'flex-start',
                     width:'100%',
@@ -84,9 +89,7 @@ export default class Group1 extends Component{
     render() {
         
         return(
-    
-            <View>
-               <View style={{marginBottom:52}}>
+               <View>
                     <FlatList
           data={this.state.dataSource}
           renderItem={({item}) =>   
@@ -98,31 +101,11 @@ export default class Group1 extends Component{
             </View> 
           </View>
           
-          }
-          
+          } 
           keyExtractor={(item, index) => index}
         />
+         
         </View>
-          <View
-          style={styles.componentContainer}
-          >
-            
-            <TextInput
-                placeholder = "Type here..."
-                returnKeyType="next"
-                underlineColorAndroid='#fff'
-                style={styles.input}
-            />
- 
-            <TouchableOpacity style = {styles.buttonContainer}>
-                <Image
-                    source={require('./img/send.png')}
-                    style={styles.sendbtn}
-                />
-            </TouchableOpacity>
-          </View>
-              
-            </View>
 
         );
     } 
@@ -138,37 +121,13 @@ const styles = StyleSheet.create({
     },
     msgStyle:{
         fontFamily:'serif',  
-        alignItems:'flex-end',
+     //   alignItems:'flex-end',
     },
     timeStyle: {
         color:'#006442',
         fontFamily:'serif',
     },
-    componentContainer: {
-        flex:1,
-        flexDirection:'row',
-      alignItems:'flex-end',
-      padding:5,
-      
-    },
-    input: {
-        padding:12,
-        height: 40,
-        marginBottom: 21,
-        width:300,
-        backgroundColor:'#fff',    
-        borderRadius:15,
-       
-    },
-    buttonContainer:
-    {
-        marginBottom:12,
-        padding:5,
-    },
-    sendbtn: {
-        width:45,
-        height:45,
-    },
+   
    
     
   });
