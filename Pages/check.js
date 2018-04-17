@@ -17,14 +17,13 @@ export default class Authenticate extends Component{
             secretAns:'',
             chatroomId:'',
             textInputUsername:'',
-            grptype:'',
         }
     }     
     login() 
     {  
         const { secretAns }  = this.state ;
         const { textInputUsername }  = this.state ;
-    fetch('http://testingoncloud.com/chat/index.php/chatroom/validateChatroom?chatroom_id='+this.state.chatroomId+'&secret_question='+this.state.secretQuestion+'&secret_ans='+this.state.secretAns+'&type='+this.state.type,{            
+    fetch('http://testingoncloud.com/chat/index.php/chatroom/validateChatroom?chatroom_id='+this.state.chatroomId+'&secret_question='+this.state.secretQuestion+'&secret_ans='+this.state.secretAns,{            
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -34,7 +33,6 @@ export default class Authenticate extends Component{
             secret_question: this.state.secretQuestion,
             secret_ans: this.state.secretAns,
             chatroom_id: this.state.chatroomId,
-            type: this.state.grptype,
         }),
     })
     .then((response) => response.json())
@@ -60,7 +58,7 @@ export default class Authenticate extends Component{
         const {params} = this.props.navigation.state;
         this.state.secretQuestion = params.question;
         this.state.chatroomId = params.chatroom_id;
-        this.state.grptype = params.type;
+        this.state.grptype =params.grptype;
         return(
             <KeyboardAvoidingView
             behavior='padding'

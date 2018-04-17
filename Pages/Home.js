@@ -24,6 +24,7 @@ export default class Home extends Component{
             secretQuestion:"",
             chatroomId:"",
             searchkey:"",
+            grptype:"",
         } 
     }   
     search() {
@@ -70,12 +71,13 @@ export default class Home extends Component{
           });
       } 
 
-      CheckAuth(id,type,question) {
+      CheckAuth(id,type,question,grptype) {
         if(type=="private") {
             this.state.secretQuestion=question;
             this.state.secretId=id;
             this.state.secretQuestion=question;
-            this.props.navigation.navigate("Authenticate",{question:question,chatroom_id:id});
+            this.state.grptype=grptype;
+            this.props.navigation.navigate("Authenticate",{question:question,chatroom_id:id,grptype:type});
         }
         else {
             this.props.navigation.navigate("GroupChatForm",{chatroom_id:id,sent_by:'asd'})
@@ -86,8 +88,7 @@ export default class Home extends Component{
     render() {
         return(
             <View>
-                  <View style={styles.componentContainer}>
-            
+                  <View style={styles.componentContainer}>          
                     <TextInput
                         placeholder = "Search..."
                         onChangeText={search => this.setState({search})}
@@ -95,14 +96,12 @@ export default class Home extends Component{
                         underlineColorAndroid='transparent'                       
                         style={styles.input}
                     />
-
                     <TouchableOpacity 
                     onPress={() => this.search()}
                     style = {styles.buttonContainer}>
                         <Image
                             source={require('./img/isearch.png')}
-                            style={styles.sendbtn}
-                            
+                            style={styles.sendbtn}  
                         />
                     </TouchableOpacity>
                     </View>
@@ -114,18 +113,15 @@ export default class Home extends Component{
                 <View style={styles.chatView}> 
                     <Text
                     style={styles.grpStyle}
-                    onPress={() => this.CheckAuth(item.chatroom_id,item.type,item.secret_question)}
+                    onPress={() => this.CheckAuth(item.chatroom_id,item.type,item.secret_question,item.type)}
                     >{item.chatroom_name}
                     </Text>
                 </View>           
              </View> 
              }
-             
              keyExtractor={(item, index) => index}
            />
-   
-           </View>
-           
+           </View> 
            </View>
         );
     } 

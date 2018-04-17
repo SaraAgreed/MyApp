@@ -19,7 +19,7 @@ export default class GroupChatForm extends Component{
         
             this.state={
                 dataSource:new ListView.DataSource({rowHasChanged:(r1,r2)=>r1 !== r2}),
-                link: 'http://testingoncloud.com/chat/index.php/chatroom/getConversation?chatroom_id=&secret_question=what%20is%20your%20pet%20name&secret_ans=dobby',
+                link: 'http://testingoncloud.com/chat/index.php/chatroom/getConversation?chatroom_id=1&secret_question=what%20is%20your%20pet%20name&secret_ans=dobby',
                 chatroomId: '',
                 sentBy: '',
                 message: '',

@@ -15,8 +15,7 @@ const Navigation = StackNavigator({
   },
   Authenticate: {
     screen: Authenticate
-  }
-   
+  },
 });
 
 export default Navigation;
