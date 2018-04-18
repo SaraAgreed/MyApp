@@ -10,27 +10,29 @@ import {
     ListView,
     Text,
     FlatList,
+    Animated,
 } from 'react-native';
 
 
 export default class GroupChatForm extends Component{
     constructor() {
         super();
-        
             this.state={
                 dataSource:new ListView.DataSource({rowHasChanged:(r1,r2)=>r1 !== r2}),
-                link: 'http://testingoncloud.com/chat/index.php/chatroom/getConversation?chatroom_id=1&secret_question=what%20is%20your%20pet%20name&secret_ans=dobby',
+                //link: 'http://testingoncloud.com/chat/index.php/chatroom/getConversation?chatroom_id='+this.state.chatroomId+'&secret_question=what%20is%20your%20pet%20name&secret_ans=dobby',
                 chatroomId: '',
                 sentBy: '',
                 message: '',
             }
         
+
         
     }   
     componentDidMount(){
         setInterval(() => {
+            const {params} = this.props.navigation.state;
             
-        return fetch(this.state.link)
+        return fetch('http://testingoncloud.com/chat/index.php/chatroom/getConversation?chatroom_id='+params.chatroom_id)
           .then((response) => response.json())
           .then((responseJson) => {
     
@@ -50,7 +52,7 @@ export default class GroupChatForm extends Component{
 
       getStyleClass = function(sentBy)
       {
-          if(sentBy == 'asd') {
+          if(sentBy == this.state.sentBy) {
                 return {  
                     padding:13,
                     alignItems:'flex-end',
@@ -69,7 +71,7 @@ export default class GroupChatForm extends Component{
       }
       getStyleConClass = function(sentBy)
       {
-          if(sentBy == 'asd') {
+          if(sentBy == this.state.sentBy) {
                 return { 
                     padding:10,
                     alignItems:'flex-end',
@@ -85,7 +87,13 @@ export default class GroupChatForm extends Component{
           }
       }
     sendmsg() {
-        fetch('http://testingoncloud.com/chat/index.php/chatroom/saveMessage?chatroom_id='+this.state.chatroomId+'&sent_by='+this.state.sentBy+'&message='+this.state.message, {              
+        if(this.state.message == '')
+        {
+            alert('Enter some text');
+        }
+        else {
+            
+            fetch('http://testingoncloud.com/chat/index.php/chatroom/saveMessage?chatroom_id='+this.state.chatroomId+'&sent_by='+this.state.sentBy+'&message='+this.state.message, {              
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -97,11 +105,15 @@ export default class GroupChatForm extends Component{
         })
         .then((response) => response.json())
       .then((responseJson) => {
-          this.textInput.clear()
+          this.textInput.clear();
+          this.state.message = '';
       })
       .catch((error) =>{
         console.error(error);
       });
+           
+        }
+        
 }
     render() {
         const {params} = this.props.navigation.state;
@@ -113,29 +125,35 @@ export default class GroupChatForm extends Component{
             <KeyboardAvoidingView
             behavior='padding'
              style={styles.container}>
-              
                 <View style={{flex:1,}}>
                 <View>
                     <FlatList
-          data={this.state.dataSource}
-          renderItem={({item}) =>   
-          <View style={this.getStyleConClass(item.sent_by)}>
-            <View style={this.getStyleClass(item.sent_by)}> 
-                <Text style={styles.nameStyle}>{item.sent_by}</Text>
-                <Text style={styles.msgStyle}>{item.message}</Text>
-                <Text style={styles.timeStyle}>{item.create_at}</Text> 
-            </View> 
-          </View>
-          
-          } 
-          keyExtractor={(item, index) => index}
+                    ref={ref => this.flatList = ref}
+                    onContentSizeChange={() => this.flatList.scrollToEnd({animated: true})}
+                    onLayout={() => this.flatList.scrollToEnd({animated: true})}
+                    data={this.state.dataSource}
+                    renderItem={({item}) =>   
+                    <View style={this.getStyleConClass(item.sent_by)}>
+                        <View style={this.getStyleClass(item.sent_by)}> 
+                            <Text style={styles.nameStyle}>{item.sent_by}</Text>
+                            <Text style={styles.msgStyle}>{item.message}</Text>
+                            <Text style={styles.timeStyle}>{item.create_at}</Text> 
+                        </View> 
+                    </View>
+                    
+                    } 
+                    keyExtractor={(item, index) => index}       
         />
          
         </View>                
                 </View>
-                <View style={{flex:1,flexDirection:'row'}}>
+                <View 
+                style={{flexDirection:'row',
+               // marginBottom:10,
+                padding:5}}>
                     
                         <TextInput
+                            autoCorrect={false}
                             ref={input=>{this.textInput = input}}
                             placeholder = "Type here..."
                             onChangeText={message => this.setState({message})}
@@ -153,11 +171,10 @@ export default class GroupChatForm extends Component{
                    </TouchableOpacity>
                   
                 </View>
-          </KeyboardAvoidingView>
+                </KeyboardAvoidingView>
         );
     } 
 }
-
 
 const styles = StyleSheet.create({
     container: {

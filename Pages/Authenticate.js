@@ -7,8 +7,9 @@ import {
     TouchableOpacity,
     Alert,
     KeyboardAvoidingView,
+    Dimensions,
 } from 'react-native';
-
+const window = Dimensions.get('window');
 export default class Authenticate extends Component{
     constructor(props){
         super();
@@ -24,7 +25,7 @@ export default class Authenticate extends Component{
     {  
         const { secretAns }  = this.state ;
         const { textInputUsername }  = this.state ;
-    fetch('http://testingoncloud.com/chat/index.php/chatroom/validateChatroom?chatroom_id='+this.state.chatroomId+'&secret_question='+this.state.secretQuestion+'&secret_ans='+this.state.secretAns+'&type='+this.state.type,{            
+    fetch('http://testingoncloud.com/chat/index.php/chatroom/validateChatroom?chatroom_id='+this.state.chatroomId+'&secret_question='+this.state.secretQuestion+'&secret_ans='+this.state.secretAns+'&type='+this.state.grptype,{            
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -39,48 +40,85 @@ export default class Authenticate extends Component{
     })
     .then((response) => response.json())
     .then((responseJson)=>{
-        if(secretAns == ''|| textInputUsername == '')
-        {
-          alert("Enter all the details.");
+        if(this.state.type=="private") {
+            if(secretAns == ''|| textInputUsername == '')
+            {
+              alert("Enter all the details.");
+            }
+            
+            else if(responseJson.response.status == 'Success') {
+                alert('Successfully Login.');  
+                this.props.navigation.navigate("GroupChatForm",{chatroom_id:this.state.chatroomId,sent_by: textInputUsername});
+            }
+            else {
+                alert('Wrong details.');
+            }
         }
-        else if(responseJson.response.status == 'Success') {
-            alert('Successfully Login.');
-           
-            this.props.navigation.navigate("GroupChatForm",{chatroom_id:this.state.chatroomId,sent_by: 'asd'});
+        else{
+            if(textInputUsername=='') {
+                alert('Enter Username');
+            }
+            else
+            {
+                this.props.navigation.navigate("GroupChatForm",{chatroom_id:this.state.chatroomId,sent_by: textInputUsername});
+            }
+            
         }
-        else {
-            alert('Wrong details.');
-        }
+       
+        
     });
     }
+    getClassStyle(){
+        if(this.state.type=="private")
+        {
+            return {
+                height:40,
+                marginBottom:10,
+            }
 
-       
+        }
+        else{
+         return {
+            overflow: 'hidden',
+            top: 0,  
+            left: 0,
+            right: 0,
+            bottom: 0,
+            position: 'absolute',
+            alignItems: 'center',
+            justifyContent:'center',
+            top: window.height,
+            bottom: -window.height
+         }
+        }
+    }
     render() {
         
         const {params} = this.props.navigation.state;
         this.state.secretQuestion = params.question;
         this.state.chatroomId = params.chatroom_id;
-        this.state.grptype = params.type;
+       this.state.type = params.grptype;
         return(
+            
             <KeyboardAvoidingView
             behavior='padding'
              style={styles.container}>
 
-                <View style={styles.components}>
+                <View style={this.getClassStyle()}>
                     <Text style={styles.inputStyle}>
                     {params.question}
                     </Text>
                 </View>
-
-                <View style={styles.components}>
+                <View 
+                style={this.getClassStyle()}>
                     <TextInput 
                     onChangeText={secretAns => this.setState({secretAns})}
                     style={styles.inputStyle}
                     placeholder="Answer"
                     placeholderTextColor='#264348'/>
                 </View>
-
-                 <View style={styles.components}>
+    
+                 <View style={styles.components}> 
                     <TextInput 
                     style={styles.inputStyle}
                     onChangeText={textInputUsername => this.setState({textInputUsername})}
@@ -102,6 +140,7 @@ export default class Authenticate extends Component{
 }
  
 const styles= StyleSheet.create({
+
 container: {
 alignItems: 'center',
 flex: 1,

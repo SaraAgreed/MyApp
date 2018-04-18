@@ -72,16 +72,10 @@ export default class Home extends Component{
       } 
 
       CheckAuth(id,type,question,grptype) {
-        if(type=="private") {
             this.state.secretQuestion=question;
             this.state.secretId=id;
-            this.state.secretQuestion=question;
             this.state.grptype=grptype;
             this.props.navigation.navigate("Authenticate",{question:question,chatroom_id:id,grptype:type});
-        }
-        else {
-            this.props.navigation.navigate("GroupChatForm",{chatroom_id:id,sent_by:'asd'})
-        }
       }
 
 
