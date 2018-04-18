@@ -1,6 +1,6 @@
-
 import React, { Component } from 'react';
 import {
+    Platform,
     View,
     StyleSheet, 
     TextInput,
@@ -10,9 +10,8 @@ import {
     ListView,
     Text,
     FlatList,
-    Animated,
 } from 'react-native';
-
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 export default class GroupChatForm extends Component{
     constructor() {
@@ -126,7 +125,7 @@ export default class GroupChatForm extends Component{
             behavior='padding'
              style={styles.container}>
                 <View style={{flex:1,}}>
-                <View>
+               
                     <FlatList
                     ref={ref => this.flatList = ref}
                     onContentSizeChange={() => this.flatList.scrollToEnd({animated: true})}
@@ -144,8 +143,7 @@ export default class GroupChatForm extends Component{
                     } 
                     keyExtractor={(item, index) => index}       
         />
-         
-        </View>                
+                       
                 </View>
                 <View 
                 style={{flexDirection:'row',
@@ -153,7 +151,9 @@ export default class GroupChatForm extends Component{
                 padding:5}}>
                     
                         <TextInput
+                            autoCapitalize="none"
                             autoCorrect={false}
+                            autoFocus={true}
                             ref={input=>{this.textInput = input}}
                             placeholder = "Type here..."
                             onChangeText={message => this.setState({message})}
@@ -171,6 +171,7 @@ export default class GroupChatForm extends Component{
                    </TouchableOpacity>
                   
                 </View>
+                <KeyboardSpacer/>
                 </KeyboardAvoidingView>
         );
     } 
@@ -207,3 +208,4 @@ const styles = StyleSheet.create({
    
   });
  
+
