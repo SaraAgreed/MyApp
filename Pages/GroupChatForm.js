@@ -22,15 +22,16 @@ export default class GroupChatForm extends Component{
                 chatroomId: '',
                 sentBy: '',
                 message: '',
+                
             }
-        
+        this.setState.dataSource = null;
 
         
     }   
-    componentDidMount(){
+    
+  /* componentDidMount(){
         setInterval(() => {
             const {params} = this.props.navigation.state;
-            
         return fetch('http://testingoncloud.com/chat/index.php/chatroom/getConversation?chatroom_id='+params.chatroom_id)
           .then((response) => response.json())
           .then((responseJson) => {
@@ -47,8 +48,28 @@ export default class GroupChatForm extends Component{
             console.error(error);
           });
         }, 1000);
-      } 
+      } */
+checkMount = function(){
+    const {params} = this.props.navigation.state;
+    this.state.sentBy = params.sent_by;
+    this.state.chatroomId = params.chatroom_id;
+    return fetch('http://testingoncloud.com/chat/index.php/chatroom/getConversation?chatroom_id='+params.chatroom_id)
+      .then((response) => response.json())
+      .then((responseJson) => {
 
+        this.setState({
+          isLoading: false,
+          dataSource: responseJson.response.data
+        }, function(){
+
+        });
+
+      })
+      .catch((error) =>{
+        console.error(error);
+      });
+}
+      
       getStyleClass = function(sentBy)
       {
           if(sentBy == this.state.sentBy) {
@@ -114,23 +135,16 @@ export default class GroupChatForm extends Component{
         }
         
 }
-    render() {
-        const {params} = this.props.navigation.state;
-        this.state.sentBy = params.sent_by;
-        this.state.chatroomId = params.chatroom_id;
-        
-        return(
-           
+    render() { 
+this.checkMount();
+        return(          
             <View
              style={styles.container}>
                 <View style={{flex:1,}}>
-               
                     <FlatList
-                  //  ref={ref => this.flatList = ref}
-                 //   onContentSizeChange={() => this.flatList.scrollToEnd({animated: true})}
-                 //   onLayout={() => this.flatList.scrollToEnd({animated: true})} 
                     data={this.state.dataSource}
-                    renderItem={({item}) =>   
+                    renderItem={({item}) =>  
+                
                     <View style={this.getStyleConClass(item.sent_by)}>
                         <View style={this.getStyleClass(item.sent_by)}> 
                             <Text style={styles.nameStyle}>{item.sent_by}</Text>
@@ -138,10 +152,11 @@ export default class GroupChatForm extends Component{
                             <Text style={styles.timeStyle}>{item.create_at}</Text> 
                         </View> 
                     </View>
-                    
                     } 
-                    
-                    keyExtractor={(item, index) => index}       
+                    keyExtractor={(item, index) => index}
+                    ref={(ref) => { this.flatList = ref; }}
+                    onContentSizeChange={() => this.flatList.scrollToEnd({animated: true})}
+                    onLayout={() => this.flatList.scrollToEnd({animated: true})}                   
         />
                        
                 </View>

@@ -20,7 +20,8 @@ export default class Authenticate extends Component{
             textInputUsername:'',
             grptype:'',
         }
-    }     
+    } 
+        
     login() 
     {  
         const { secretAns }  = this.state ;
