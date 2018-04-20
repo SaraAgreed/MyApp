@@ -121,15 +121,14 @@ export default class GroupChatForm extends Component{
         
         return(
            
-            <KeyboardAvoidingView
-            behavior='padding'
+            <View
              style={styles.container}>
                 <View style={{flex:1,}}>
                
                     <FlatList
-                    ref={ref => this.flatList = ref}
-                    onContentSizeChange={() => this.flatList.scrollToEnd({animated: true})}
-                    onLayout={() => this.flatList.scrollToEnd({animated: true})}
+                  //  ref={ref => this.flatList = ref}
+                 //   onContentSizeChange={() => this.flatList.scrollToEnd({animated: true})}
+                 //   onLayout={() => this.flatList.scrollToEnd({animated: true})} 
                     data={this.state.dataSource}
                     renderItem={({item}) =>   
                     <View style={this.getStyleConClass(item.sent_by)}>
@@ -141,13 +140,13 @@ export default class GroupChatForm extends Component{
                     </View>
                     
                     } 
+                    
                     keyExtractor={(item, index) => index}       
         />
                        
                 </View>
                 <View 
                 style={{flexDirection:'row',
-               // marginBottom:10,
                 padding:5}}>
                     
                         <TextInput
@@ -159,8 +158,7 @@ export default class GroupChatForm extends Component{
                             onChangeText={message => this.setState({message})}
                             returnKeyType="next"
                             underlineColorAndroid='#fff'
-                            style={styles.input}
-                        />
+                            style={styles.input}/>     
                    
                     <TouchableOpacity 
                     onPress={() =>this.sendmsg()}>
@@ -172,7 +170,8 @@ export default class GroupChatForm extends Component{
                   
                 </View>
                 <KeyboardSpacer/>
-                </KeyboardAvoidingView>
+              </View>
+                
         );
     } 
 }
